@@ -1,0 +1,1 @@
+# Sogeti_test_technique
