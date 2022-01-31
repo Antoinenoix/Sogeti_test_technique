@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Entypo } from '@expo/vector-icons';
 
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, TextInput, Pressable, ScrollView } from 'react-native';
 import TodoModal from './Modal/TodoModal'
 import styles from './App.style';
 import data from '../data/Todos'
 
 export default function App() {
 
+  const [textInput, setTextInput] = useState('');
   const [allTodos, setAllTodos] = useState(data);
   const [todosDone , setTodosDone] = useState([]);
   const [modal , setModal] = useState(false);
@@ -15,6 +16,8 @@ export default function App() {
   const [description, setDescription] = useState('');
   //Set up all the states we need
 
+  const ref = useRef('textInput');
+  //Set up the ref for our textInput to clear it later
 
   function arraymove(arr, fromIndex, toIndex) {
     var element = arr[fromIndex];
@@ -78,10 +81,42 @@ export default function App() {
     )
   });
 
+  const onRequest = () => {
+    if (textInput) {
+      setAllTodos(allTodos => [{title: textInput, description: ''}, ...allTodos]);
+      setTextInput('');
+    }
+    ref.current.clear();
+  };
+  //Set up a function to push the textinput we just write in the todolist
+
+  const onClear = () => {
+    setAllTodos([]);
+  };
+  //Set up a function to clear all the todos
+
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.title}>TodoList</Text>
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => setTextInput(text)}
+          maxLength={20}
+          placeholder='À faire? (20 caractères max.)'
+          placeholderTextColor='#e5e5e5'
+          ref={ref}
+        />
+        <View style={styles.buttons}>
+          {(todoView.length >= 1) && (
+          <Pressable style={styles.clear} onPress={onClear}>
+            <Text style={styles.clearText}>Tout supprimer</Text>
+          </Pressable>
+          )}
+          <Pressable style={styles.public} onPress={onRequest}>
+            <Text style={styles.publicText}>Ajouter</Text>
+          </Pressable>
+        </View>
         {todoView}
         <TodoModal 
           title={title} 
