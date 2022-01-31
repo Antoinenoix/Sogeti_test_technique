@@ -6,5 +6,5 @@ To start the application:
   -do a quick "npm install"
   -then "npm start"
   -put the QRcode u get on ur expo GO app
-  -and that's it
+  -and that's it.
 
